@@ -21,42 +21,55 @@ javascript:(function(){function c(){var e=document.createElement("link");e.setAt
 
 var styleblock="p.bubble{position:relative;width:300px;text-align:center;line-height:1.4em;margin:40px auto;background-color:#fff;border:8px solid #333;border-radius:30px;font-family:sans-serif;padding:20px;font-size:large}p.thought{width:300px;border-radius:200px;padding:30px}p.bubble:after,p.bubble:before{content:' ';position:absolute;width:0;height:0}p.speech:before{left:30px;bottom:-50px;border:25px solid;border-color:#333 transparent transparent #333}p.speech:after{left:38px;bottom:-30px;border:15px solid;border-color:#fff transparent transparent #fff}p.thought:after,p.thought:before{left:10px;bottom:-30px;width:40px;height:40px;background-color:#fff;border:8px solid #333;-webkit-border-radius:28px;-moz-border-radius:28px;border-radius:28px}p.thought:after{width:20px;height:20px;left:5px;bottom:-40px;-webkit-border-radius:18px;-moz-border-radius:18px;border-radius:18px}";
 
+var scriptsAllowed;
+
+$("head").append("<style>"+styleblock+"</style>");
+//
 function addBubbles(){
-        $('.v1Nh3').each(function(){
-            if($( this ).find('.bubble').length === 0 ) {
+    if(scriptsAllowed) {
+        $('.v1Nh3').each(function () {
+            if ($(this).find('.bubble').length === 0) {
                 console.log('adding bubble element ');
-                var currentMarkup = $( this ).html();
-                $( this ).html('<p class="bubble thought">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, nemo, debitis.</p>'+currentMarkup);
-            }else{
-                console.log('found bubble element '+$( this ).find('.bubble').length);
+                var currentMarkup = $(this).html();
+                $(this).prepend('<p class="bubble thought">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, nemo, debitis.</p>');
+            } else {
+                console.log('found bubble element ' + $(this).find('.bubble').length);
             }
         });
+    }
 
 }
 
+$( document ).on('wheel scroll load', function(e){
+    console.log('attaching to image');
+    addBubbles();
+});
+
+
 var yourCodeToBeCalled = function(){
+
+    scriptsAllowed = true;
 /* $.when(
     $.getScript( "https://bluqr.com/js/harlemshake.js" )
 	).done(function(data){
     eval(data);
  */    //place your code here, the scripts are all loaded
-$("head").append("<style>"+styleblock+"</style>");
-    var myRequestLog = []; // Using `var` (instead of `let` or `const`) so it creates an implicit property on the (global) `window` object so you can easily access this log from anywhere just by using `window.myRequestLog[...]`.
-    function onRequestsObserved( batch ) {
-        let xhrReqs=batch.getEntries().filter(entry => entry.initiatorType ==='xmlhttprequest' && entry.name.indexOf('graphql') > 0);
-        for(let i=0;i<batch.getEntries().length;i++){
-            if(batch.getEntries()[i].name.indexOf('graphql') > 0) {
-                console.log('FOUND XHR REQUEST');
-                addBubbles();
-            }
-        }
-        console.dir(batch.getEntries());
-        myRequestLog.push( ...batch.getEntries() );
-    }
-    var requestObserver = new PerformanceObserver( onRequestsObserved );
-    requestObserver.observe( { type: 'resource' /*, buffered: true */ } );
+//$("head").append("<style>"+styleblock+"</style>");
+    // var myRequestLog = []; // Using `var` (instead of `let` or `const`) so it creates an implicit property on the (global) `window` object so you can easily access this log from anywhere just by using `window.myRequestLog[...]`.
+    // function onRequestsObserved( batch ) {
+    //     let xhrReqs=batch.getEntries().filter(entry => entry.initiatorType ==='xmlhttprequest' && entry.name.indexOf('graphql') > 0);
+    //     for(let i=0;i<batch.getEntries().length;i++){
+    //         if(batch.getEntries()[i].name.indexOf('graphql') > 0) {
+    //             console.log('FOUND XHR REQUEST');
+    //             addBubbles();
+    //         }
+    //     }
+    //     console.dir(batch.getEntries());
+    //     myRequestLog.push( ...batch.getEntries() );
+    // }
+    // var requestObserver = new PerformanceObserver( onRequestsObserved );
+    // requestObserver.observe( { type: 'resource' /*, buffered: true */ } );
 
-    //addBubbles();
     $('.v1Nh3').each(function(){
 	console.log('adding markup to image '+$( this ));
 	var currentMarkup = $( this ).html();
